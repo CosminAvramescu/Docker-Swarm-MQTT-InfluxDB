@@ -1,0 +1,66 @@
+version: '3.7'
+
+services:
+  mqtt_broker:
+    image: eclipse-mosquitto:latest
+    hostname: mqtt_broker
+    networks:
+      - broker_adapter_net
+    deploy:
+      replicas: 1
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  influx_db:
+    image: influxdb:1.0
+    hostname: influx_db
+    networks:
+      - db_adapter_net
+      - grafana_db_net
+    ports:
+      - "8086:8086"
+    deploy:
+      replicas: 1
+    volumes:
+      - influx_db:/var/lib/influxdb
+
+  adapter:
+    image: adapter
+    networks:
+      - broker_adapter_net
+      - db_adapter_net
+    environment:
+      DEBUG_DATA_FLOW: "true"
+    deploy:
+      replicas: 1
+    depends_on:
+      - influx_db
+      - mqtt_broker
+
+  grafana:
+    image: grafana/grafana:latest
+    networks:
+      - grafana_db_net
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: grafanaSPRC2023
+      GF_SECURITY_ADMIN_USER: asistent
+    ports:
+      - "80:3000"
+    depends_on:
+      - influx_db
+    deploy:
+      replicas: 1
+    volumes:
+      - grafana_db:/var/lib/grafana
+
+networks:
+  broker_adapter_net:
+  db_adapter_net:
+  grafana_db_net:
+
+volumes:
+  influx_db:
+  grafana_db:
+
