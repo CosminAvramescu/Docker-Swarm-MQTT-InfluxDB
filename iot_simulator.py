@@ -15,7 +15,7 @@ if __name__ == "__main__":
             "HUMID": random.randint(0, 100),
             "TEMP": random.randint(-20, 40)
         }
-        
+
         if n%4 == 0:
             data['timestamp']=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             data['status']="ok"

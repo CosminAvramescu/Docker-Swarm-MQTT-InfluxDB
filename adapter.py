@@ -17,10 +17,10 @@ def on_connect(client, args, flags, rc):
 
 def on_message(client, args, msg):
     logging.info(f"Received a message by topic [{msg.topic}]")
-    
+
     location, station = msg.topic.split("/")
     data = loads(msg.payload)
-    
+
     try:
         if "timestamp" not in data:
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -51,14 +51,14 @@ def on_message(client, args, msg):
             database.write_points(data_to_send)
     except Exception as e:
         logging.error(f"Error in function on_message: {e}")
-        
+  
 if __name__ == "__main__":
     logging.basicConfig(
         format="%(asctime)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
         level=logging.INFO
     )
-    
+
     mqtt_cl = mqtt.Client()
     mqtt_cl.on_connect = on_connect
     mqtt_cl.on_message = on_message
