@@ -1,6 +1,6 @@
 344C3_Avramescu_Cosmin
 
---- Aspecte generale
+--- Aspecte generalecmz
     Punctul de pornire al aplicatiei este scriptul run.sh, care face 2 lucruri: da comanda docker swarm init, care initializeaza ca nod manager masina de pe care se ruleaza, apoi se face build cu ajutorul Dockerfile pentru a se crea imaginea adaptorului. Dupa rularea acestui script, se pot rula comenzile de deploy stack, apoi python3 iot_simulator.py pentru a trimite date prin mqtt, adaptor catre baza de date. Apoi se poate da comanda cu stack rm pentru a verifica ulterior persistenta datelor.
 
 --- fisierul stack.yml
